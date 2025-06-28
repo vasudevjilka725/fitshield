@@ -1,14 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-    Dimensions,
-    FlatList,
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import TopBar from "../components/TopBar";
@@ -46,7 +46,9 @@ export default function Wallet() {
     <View style={styles.tableRowHeader}>
       {["Date", "Bill No", "Name", "Time", "Table No", "Pay Type", "View"].map(
         (item, index) => (
-          <Text key={index} style={[styles.cell, styles.cellHeader]}>
+          <Text key={index} style={[styles.cell, styles.cellHeader, {
+            width : columnWidths[index]
+          }]}>
             {item}
           </Text>
         )
@@ -55,18 +57,24 @@ export default function Wallet() {
   );
 
   const renderRow = ({ item }: any) => (
-    <View style={styles.tableRow}>
-      <Text style={styles.cell}>{item.date}</Text>
-      <Text style={styles.cell}>{item.billNo}</Text>
-      <Text style={styles.cell}>{item.name}</Text>
-      <Text style={styles.cell}>{item.time}</Text>
-      <Text style={styles.cell}>{item.tableNo}</Text>
-      <Text style={styles.cell}>{item.payType}</Text>
-      <TouchableOpacity>
-        <Text style={[styles.cell, styles.viewText]}>See All</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  <View style={styles.tableRow}>
+    {[item.date, item.billNo, item.name, item.time, item.tableNo, item.payType, "See All"].map(
+      (val, index) => (
+        index === 6 ? (
+          <TouchableOpacity key={index}>
+            <Text style={[styles.cell, styles.viewText, { width: columnWidths[index] }]}>
+              {val}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <Text key={index} style={[styles.cell, { width: columnWidths[index] }]}>
+            {val}
+          </Text>
+        )
+      )
+    )}
+  </View>
+);
 
   return (
     <View style={styles.screen}>
@@ -131,6 +139,9 @@ export default function Wallet() {
     </View>
   );
 }
+
+// Define fixed widths for perfect alignment
+const columnWidths = [190, 190, 190, 190, 190, 190, 190];
 
 const styles = StyleSheet.create({
   screen: {
@@ -249,8 +260,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    alignItems : 'center',
-    justifyContent : "center"
+    alignItems: "center",
   },
 
   tableRow: {
@@ -260,8 +270,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-     alignItems : 'center',
-    justifyContent : "center"
+    alignItems: "center",
   },
 
   tableBody: {
@@ -269,16 +278,14 @@ const styles = StyleSheet.create({
   },
 
   cellHeader: {
-    flex: 1,
-  fontWeight: "bold",
-  fontSize: 14,
-  textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 14,
+    textAlign: "center",
   },
 
   cell: {
-     flex: 1,
-  fontSize: 17,
-  textAlign: "center",
+    fontSize: 17,
+    textAlign: "center",
   },
 
   viewText: {
@@ -286,3 +293,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
