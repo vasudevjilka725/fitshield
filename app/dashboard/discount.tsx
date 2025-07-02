@@ -2,14 +2,13 @@ import TopBar from "@/components/TopBar";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-    FlatList,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View
 } from "react-native";
 import { DataTable } from "react-native-paper";
 
@@ -31,199 +30,16 @@ export default function DiscountPage() {
   const [selectedDropdown2, setSelectedDropdown2] = useState("Full");
 
   const discountOptions = Array.from({ length: 21 }, (_, i) => `${i * 5}%`);
-  const dropdown1Options = [
-    "All",
-    "Drinks",
-    "Desserts",
-    "Main Course",
-    "Side Dish",
-  ];
+  const dropdown1Options = ["All", "Drinks", "Desserts", "Main Course", "Side Dish"];
   const dropdown2Options = ["Full", "Half"];
 
-  const initialData: ItemType[] = [
-    {
-      id: "1",
-      name: "Paneer Butter Masala",
-      price: 250,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "2",
-      name: "Chicken Biryani",
-      price: 300,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "3",
-      name: "Masala Dosa",
-      price: 120,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "4",
-      name: "Veg Fried Rice",
-      price: 180,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "5",
-      name: "Dal Makhani",
-      price: 200,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "6",
-      name: "Butter Naan",
-      price: 40,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "7",
-      name: "Gulab Jamun",
-      price: 50,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "8",
-      name: "Tandoori Chicken",
-      price: 350,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "9",
-      name: "Chole Bhature",
-      price: 150,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "10",
-      name: "Samosa",
-      price: 20,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "11",
-      name: "Mutton Rogan Josh",
-      price: 400,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "12",
-      name: "Veg Manchurian",
-      price: 160,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "13",
-      name: "Fish Curry",
-      price: 320,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "14",
-      name: "Egg Curry",
-      price: 180,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "15",
-      name: "Idli Sambhar",
-      price: 90,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "16",
-      name: "Pav Bhaji",
-      price: 130,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "17",
-      name: "Rajma Chawal",
-      price: 170,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "18",
-      name: "Hakka Noodles",
-      price: 190,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "19",
-      name: "Veg Pulao",
-      price: 160,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-    {
-      id: "20",
-      name: "Ice Cream Sundae",
-      price: 110,
-      selected: false,
-      discount: "0%",
-      discountDropdownVisible: false,
-    },
-  ];
-
-  const [tableData, setTableData] = useState(initialData);
-
-  const renderDropdownItem = (item: string, id: string) => (
-    <TouchableOpacity
-      key={item}
-      style={styles.dropdownItem}
-      onPress={() => changeDiscount(id, item)}
-    >
-      <Text>{item}</Text>
-    </TouchableOpacity>
-  );
+  const [tableData, setTableData] = useState<ItemType[]>(generateInitialData());
 
   const toggleSelect = (id: string) => {
     setTableData((prev) =>
       prev.map((item) =>
         item.id === id
-          ? {
-              ...item,
-              selected: !item.selected,
-              discountDropdownVisible: false,
-            }
+          ? { ...item, selected: !item.selected, discountDropdownVisible: false }
           : item
       )
     );
@@ -233,7 +49,12 @@ export default function DiscountPage() {
     setTableData((prev) =>
       prev.map((item) =>
         item.id === id
-          ? { ...item, discountDropdownVisible: !item.discountDropdownVisible }
+          ? {
+              ...item,
+              discountDropdownVisible: item.selected
+                ? !item.discountDropdownVisible
+                : false,
+            }
           : { ...item, discountDropdownVisible: false }
       )
     );
@@ -267,22 +88,24 @@ export default function DiscountPage() {
 
           <View style={styles.rightControls}>
             <View style={styles.searchContainer}>
-              <Ionicons
-                name="search"
-                size={20}
-                color="#A9A9A9"
-                style={styles.searchIcon}
-              />
-              <TextInput
-                style={styles.searchBar}
-                placeholder="Search dish name..."
-                placeholderTextColor="#A9A9A9"
-                value={search1}
-                onChangeText={setSearch1}
-              />
+              <View style={styles.searchWrapper}>
+                <Ionicons
+                  name="search"
+                  size={20}
+                  color="#A9A9A9"
+                  style={styles.searchIconInside}
+                />
+                <TextInput
+                  style={styles.searchBar}
+                  placeholder="Search dish name..."
+                  placeholderTextColor="#A9A9A9"
+                  value={search1}
+                  onChangeText={setSearch1}
+                />
+              </View>
             </View>
 
-            <View style={styles.dropdownMainContainer}>
+            <View style={[styles.dropdownMainContainer, { zIndex: 10000 }]}>
               <TouchableOpacity
                 style={styles.dropdownLarge}
                 onPress={() => {
@@ -292,16 +115,11 @@ export default function DiscountPage() {
               >
                 <View style={styles.dropdownInner}>
                   <Text>{selectedDropdown1}</Text>
-                  <Ionicons
-                    name="chevron-down"
-                    size={16}
-                    color="#333"
-                    style={{ marginLeft: 8 }}
-                  />
+                  <Ionicons name="chevron-down" size={16} color="#333" style={{ marginLeft: 8 }} />
                 </View>
               </TouchableOpacity>
               {dropdown1Visible && (
-                <View style={styles.dropdownListLarge}>
+                <View style={[styles.dropdownListLarge, { zIndex: 10000 }]}>
                   {dropdown1Options.map((item) => (
                     <TouchableOpacity
                       key={item}
@@ -318,7 +136,7 @@ export default function DiscountPage() {
               )}
             </View>
 
-            <View style={styles.dropdownMainContainer}>
+            <View style={[styles.dropdownMainContainer, { zIndex: 10000 }]}>
               <TouchableOpacity
                 style={styles.dropdown}
                 onPress={() => {
@@ -328,16 +146,11 @@ export default function DiscountPage() {
               >
                 <View style={styles.dropdownInner}>
                   <Text>{selectedDropdown2}</Text>
-                  <Ionicons
-                    name="chevron-down"
-                    size={16}
-                    color="#333"
-                    style={{ marginLeft: 8 }}
-                  />
+                  <Ionicons name="chevron-down" size={16} color="#333" style={{ marginLeft: 8 }} />
                 </View>
               </TouchableOpacity>
               {dropdown2Visible && (
-                <View style={styles.dropdownList}>
+                <View style={[styles.dropdownList, { zIndex: 10000 }]}>
                   {dropdown2Options.map((item) => (
                     <TouchableOpacity
                       key={item}
@@ -370,10 +183,7 @@ export default function DiscountPage() {
                 <DataTable.Title style={[styles.column, styles.cellBorder]}>
                   Dish Name
                 </DataTable.Title>
-                <DataTable.Title
-                  numeric
-                  style={[styles.column, styles.cellBorder]}
-                >
+                <DataTable.Title numeric style={[styles.column, styles.cellBorder]}>
                   Current Price
                 </DataTable.Title>
                 <DataTable.Title style={[styles.column, styles.cellBorder]}>
@@ -386,17 +196,13 @@ export default function DiscountPage() {
 
               {tableData.map((item) => {
                 const discountValue = parseInt(item.discount);
-                const discountPrice =
-                  item.price - (item.price * discountValue) / 100;
+                const discountPrice = item.price - (item.price * discountValue) / 100;
 
                 return (
                   <DataTable.Row key={item.id} style={styles.row}>
                     <DataTable.Cell style={[styles.column, styles.cellBorder]}>
                       <TouchableOpacity
-                        style={[
-                          styles.checkbox,
-                          item.selected && styles.checkboxSelected,
-                        ]}
+                        style={[styles.checkbox, item.selected && styles.checkboxSelected]}
                         onPress={() => toggleSelect(item.id)}
                       >
                         {item.selected && (
@@ -408,47 +214,40 @@ export default function DiscountPage() {
                     <DataTable.Cell style={[styles.column, styles.cellBorder]}>
                       {item.name}
                     </DataTable.Cell>
-                    <DataTable.Cell
-                      numeric
-                      style={[styles.column, styles.cellBorder]}
-                    >
+
+                    <DataTable.Cell numeric style={[styles.column, styles.cellBorder]}>
                       ₹{item.price}
                     </DataTable.Cell>
 
                     <DataTable.Cell style={[styles.column, styles.cellBorder]}>
-                      {item.selected ? (
-                        <View style={{ position: "relative", zIndex: 9999 }}>
-                          <TouchableOpacity
-                            style={styles.discountDropdown}
-                            onPress={() => toggleDiscountDropdown(item.id)}
-                          >
-                            <View style={styles.discountDropdownInner}>
-                              <Text>{item.discount}</Text>
-                              <Ionicons
-                                name="chevron-down"
-                                size={16}
-                                color="#333"
-                                style={{ marginLeft: 8 }}
-                              />
-                            </View>
-                          </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[
+                          styles.discountCell,
+                          !item.selected && { opacity: 0.5 },
+                        ]}
+                        onPress={() => {
+                          if (item.selected) toggleDiscountDropdown(item.id);
+                        }}
+                        disabled={!item.selected}
+                      >
+                        <Text>{item.discount}</Text>
+                        <Ionicons name="chevron-down" size={16} color="#333" style={{ marginLeft: 8 }} />
+                      </TouchableOpacity>
 
-                          {item.discountDropdownVisible && (
-                            <View style={styles.discountDropdownListWrapper}>
-                              <View style={styles.discountDropdownList}>
-                                <FlatList
-                                  data={discountOptions}
-                                  keyExtractor={(option) => option}
-                                  renderItem={({ item: option }) =>
-                                    renderDropdownItem(option, item.id)
-                                  }
-                                />
-                              </View>
-                            </View>
-                          )}
+                      {item.discountDropdownVisible && (
+                        <View style={styles.dropdownListContainer}>
+                          <ScrollView style={styles.dropdownList}>
+                            {discountOptions.map((option) => (
+                              <TouchableOpacity
+                                key={option}
+                                style={styles.dropdownItem}
+                                onPress={() => changeDiscount(item.id, option)}
+                              >
+                                <Text>{option}</Text>
+                              </TouchableOpacity>
+                            ))}
+                          </ScrollView>
                         </View>
-                      ) : (
-                        <Text>0%</Text>
                       )}
                     </DataTable.Cell>
 
@@ -466,187 +265,83 @@ export default function DiscountPage() {
   );
 }
 
+function generateInitialData(): ItemType[] {
+  const names = [
+    "Paneer Butter Masala", "Chicken Biryani", "Masala Dosa", "Veg Fried Rice", "Dal Makhani",
+    "Butter Naan", "Gulab Jamun", "Tandoori Chicken", "Chole Bhature", "Samosa",
+    "Mutton Rogan Josh", "Veg Manchurian", "Fish Curry", "Egg Curry", "Idli Sambhar",
+    "Pav Bhaji", "Rajma Chawal", "Hakka Noodles", "Veg Pulao", "Ice Cream Sundae"
+  ];
+  return names.map((name, index) => ({
+    id: (index + 1).toString(),
+    name,
+    price: 100 + index * 10,
+    selected: false,
+    discount: "0%",
+    discountDropdownVisible: false,
+  }));
+}
+
 const SEARCH_HEIGHT = 40;
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingLeft: 40,
-    paddingRight: 20,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
+  mainContainer: { flex: 1, backgroundColor: "#fff", paddingLeft: 40, paddingRight: 20 },
   controlsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-    zIndex: 999,
-    justifyContent: "space-between",
-    marginTop: 30,
+    flexDirection: "row", alignItems: "center", marginBottom: 15,
+    justifyContent: "space-between", marginTop: 30,
   },
-  discountLabel: {
-    fontSize: 30,
-    fontWeight: "500",
-    color: "#333",
-    paddingLeft: 25,
+  discountLabel: { fontSize: 30, fontWeight: "500", color: "#333", paddingLeft: 25 },
+  rightControls: { flexDirection: "row", alignItems: "center" },
+  searchContainer: { flexDirection: "row", alignItems: "center" },
+  searchWrapper: {
+    flexDirection: "row", alignItems: "center",
+    borderWidth: 1, borderColor: "#ccc", borderRadius: 6,
+    paddingHorizontal: 10, height: SEARCH_HEIGHT, width: 450, backgroundColor: "#fff",
   },
-  rightControls: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  searchBar: {
-    height: SEARCH_HEIGHT,
-    width: 450,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    marginRight: 10,
-  },
-  searchContainer :{
-     flexDirection: "row",
-    alignItems: "center",
-  },
-  tableContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingTop: 1,
-    maxHeight: 500,
-    borderWidth: 1,
-    marginLeft: 25,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 4,
-    marginTop: 30,
-  },
-  tableHeader: {
-    backgroundColor: "#A9A9A9",
-    borderTopLeftRadius: 8,
-  },
-  column: {
-    justifyContent: "center",
-  },
-  cellBorder: {
-    borderRightWidth: 1,
-    borderColor: "#ccc",
-  },
-  row: {
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: "#333",
-    borderRadius: 4,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  checkboxSelected: { backgroundColor: "green" },
-  discountDropdown: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    height: SEARCH_HEIGHT - 15,
-    backgroundColor: "#fff",
-    width: 200,
-  },
-  dropdownMainContainer: { position: "relative", marginRight: 10, zIndex: 999 },
+  searchIconInside: { marginRight: 8 },
+  searchBar: { flex: 1, fontSize: 16 },
+  dropdownMainContainer: { position: "relative", marginRight: 10 },
   dropdownLarge: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: 200,
-    height: SEARCH_HEIGHT,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+    width: 200, height: SEARCH_HEIGHT, borderWidth: 1, borderColor: "#ccc",
+    borderRadius: 6, paddingHorizontal: 10, backgroundColor: "#fff",
   },
   dropdown: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: 90,
-    height: SEARCH_HEIGHT,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
+    width: 90, height: SEARCH_HEIGHT, borderWidth: 1, borderColor: "#ccc",
+    borderRadius: 6, paddingHorizontal: 10, backgroundColor: "#fff",
   },
   dropdownListLarge: {
-    position: "absolute",
-    top: SEARCH_HEIGHT + 2,
-    width: 200,
-    maxHeight: 150,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
+    position: "absolute", top: SEARCH_HEIGHT + 2, width: 200, maxHeight: 150,
+    backgroundColor: "#fff", borderWidth: 1, borderColor: "#ccc",
     borderRadius: 6,
-    zIndex: 999,
   },
-  dropdownList: {
-    position: "absolute",
-    top: SEARCH_HEIGHT + 2,
-    width: 90,
-    maxHeight: 150,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    zIndex: 999,
-  },
-  dropdownItem: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
-  discountDropdownListWrapper: {
-    position: "absolute",
-    top: 35,
-    left: 0,
-    right: 0,
-    backgroundColor: "transparent",
-    zIndex: 9999,
-  },
-  discountDropdownList: {
-    maxHeight: 200,
-    width: 80,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    elevation: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
+  dropdownList: { maxHeight: 200 },
+  dropdownItem: { paddingVertical: 6, paddingHorizontal: 10, borderBottomWidth: 1, borderBottomColor: "#eee" },
   goLiveButton: {
-    backgroundColor: "green",
-    borderRadius: 6,
-    width: 150,
-    height: SEARCH_HEIGHT,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "green", borderRadius: 6, width: 150,
+    height: SEARCH_HEIGHT, justifyContent: "center", alignItems: "center",
   },
   goLiveText: { color: "#fff", fontWeight: "bold" },
-  dropdownInner: {
-    flexDirection: "row",
-    alignItems: "center",
+  dropdownInner: { flexDirection: "row", alignItems: "center" },
+  tableContainer: {
+    backgroundColor: "#fff", borderRadius: 8, maxHeight: 500,
+    borderWidth: 1, marginLeft: 25, shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.5,
+    shadowRadius: 3, elevation: 4, marginTop: 30,
   },
-
-  discountDropdownInner: {
-    flexDirection: "row",
-    alignItems: "center",
+  tableHeader: { backgroundColor: "#A9A9A9", borderTopLeftRadius: 8 },
+  column: { justifyContent: "center" },
+  cellBorder: { borderRightWidth: 1, borderColor: "#ccc" },
+  row: { borderBottomWidth: 1, borderColor: "#ccc" },
+  checkbox: {
+    width: 20, height: 20, borderWidth: 1, borderColor: "#333",
+    borderRadius: 4, justifyContent: "center", alignItems: "center",
+  },
+  checkboxSelected: { backgroundColor: "green" },
+  discountCell: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  dropdownListContainer: {
+    position: "absolute", top: SEARCH_HEIGHT / 2, left: 0, right: 0,
+    backgroundColor: "#fff", borderWidth: 1, borderColor: "#ccc",
+    borderRadius: 6, zIndex: 9999,
   },
 });

@@ -1,5 +1,5 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { navigate } from "expo-router/build/global-state/routing";
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
@@ -9,8 +9,8 @@ type TopBarProps = {
 };
 
 export default function TopBar({ search, setSearch }: TopBarProps) {
+  const router = useRouter();
 
-    
   return (
     <View style={styles.rowWrapper}>
       <View style={styles.searchContainer}>
@@ -36,13 +36,13 @@ export default function TopBar({ search, setSearch }: TopBarProps) {
           color="#B22222"
           style={{ marginRight: 4 }}
         />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/dashboard/unverified')}>
           <Text style={styles.unverifiedText}>Unverified</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.earningContainer}>
-        <TouchableOpacity onPress={() => navigate('/wallet')}>
+        <TouchableOpacity onPress={() => router.push('/wallet')}>
           <Text style={styles.earningText}>Live earning: 0/-</Text>
         </TouchableOpacity>
       </View>
@@ -54,7 +54,7 @@ export default function TopBar({ search, setSearch }: TopBarProps) {
       </View>
 
       <View style={styles.iconButton}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ () => router.push('/dashboard/profile')}>
           <Ionicons name="person-circle-outline" size={22} color="#000" />
         </TouchableOpacity>
       </View>
